@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gemini Chat App</title>
+  <meta charset="UTF-8">
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; }
+    textarea, input, button { width: 100%; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>Chat with Gemini</h1>
+  <form id="chat-form">
+    <input type="text" id="user_input" name="user_input" placeholder="Ask something..." required>
+    <button type="submit">Send</button>
+  </form>
+  <div id="response"></div>
+
+  <script>
+    const form = document.getElementById("chat-form");
+    const responseDiv = document.getElementById("response");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const input = document.getElementById("user_input").value;
+      const res = await fetch("/gemini", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ user_input: input })
+      });
+      const data = await res.json();
+      responseDiv.innerHTML = `<p><strong>Gemini:</strong> ${data.content}</p>`;
+    });
+  </script>
+</body>
+</html>
